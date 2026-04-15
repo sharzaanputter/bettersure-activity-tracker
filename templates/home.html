@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BetterSure Activity Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: rgb(24, 94, 115);
+            color: white;
+        }
+        .card {
+            background-color: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 { color: rgb(245, 132, 31); }
+        h2 { color: white; }
+        h3 { color: rgb(24, 94, 115); margin-top: 0; }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: rgb(245, 132, 31);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover { background-color: rgb(24, 94, 115); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: rgb(245, 132, 31); color: white; }
+        td.total { font-weight: bold; color: rgb(24, 94, 115); }
+        .nav-button {
+            background-color: rgb(245, 132, 31);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-block;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+        .nav-button:hover { 
+            background-color: #e0e0e0;
+            color: #333;
+             border: 2px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h1>BetterSure Activity Tracker</h1>
+
+    <div class="card">
+        <h3>Log Your Activities</h3>
+        <form method="POST">
+            <label>👤 Athlete</label>
+            <select name="athlete">
+                {% for athlete in athletes %}
+                <option value="{{ athlete }}">{{ athlete }}</option>
+                {% endfor %}
+            </select>
+
+            <label>🗓️ Month</label>
+            <select name="month">
+                {% for month in months %}
+                <option value="{{ month }}" {% if month == current_month %}selected{% endif %}>{{ month }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Week</label>
+            <select name="week">
+                {% for week in weeks %}
+                <option value="{{ week }}">{{ week }}</option>
+                {% endfor %}
+            </select>
+
+            <label>🧮 Active Days</label>
+            <input type="number" name="active_days" placeholder="Enter active days" min="0" step="1">
+
+            <label>⏱️ Active Minutes</label>
+            <input type="number" name="active_minutes" placeholder="Enter active minutes" min="0" step="1">
+
+            <button type="submit">Save Entry</button>
+        </form>
+    </div>
+
+    {% if days_table %}
+    <div class="card">
+        <h3>Active Days</h3>
+        <table>
+            <tr>
+                <th>Athlete</th><th>Month</th><th>Week 1</th>
+                <th>Week 2</th><th>Week 3</th><th>Week 4</th><th>Total</th>
+            </tr>
+            {% for row in days_table %}
+            <tr>
+                <td>{{ row["Athlete"] }}</td>
+                <td>{{ row["Month"] }}</td>
+                <td>{{ row["Week 1"] }}</td>
+                <td>{{ row["Week 2"] }}</td>
+                <td>{{ row["Week 3"] }}</td>
+                <td>{{ row["Week 4"] }}</td>
+                <td class="total">{{ row["Total"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Active Minutes</h3>
+        <table>
+            <tr>
+                <th>Athlete</th><th>Month</th><th>Week 1</th>
+                <th>Week 2</th><th>Week 3</th><th>Week 4</th><th>Total</th>
+            </tr>
+            {% for row in minutes_table %}
+            <tr>
+                <td>{{ row["Athlete"] }}</td>
+                <td>{{ row["Month"] }}</td>
+                <td>{{ row["Week 1"] }}</td>
+                <td>{{ row["Week 2"] }}</td>
+                <td>{{ row["Week 3"] }}</td>
+                <td>{{ row["Week 4"] }}</td>
+                <td class="total">{{ row["Total"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+    <a href="/pastwinners" class="nav-button">🏆 Past Winners</a>
+    <a href="/download" class="nav-button">⬇️ Download Data</a>
+    <a href="/matrix" class="nav-button">👾Bingo Challenge</a>
+
+</body>
+</html>
