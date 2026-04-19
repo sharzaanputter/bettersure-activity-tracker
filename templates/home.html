@@ -86,10 +86,10 @@
             </select>
 
             <label>🧮 Active Days</label>
-            <input type="number" name="active_days" placeholder="Enter active days" min="0" step="1">
+            <input type="number" name="active_days" placeholder="Enter active days (optional)" min="0" step="1">
 
             <label>⏱️ Active Minutes</label>
-            <input type="number" name="active_minutes" placeholder="Enter active minutes" min="0" step="1">
+            <input type="number" name="active_minutes" placeholder="Enter active minutes (optional)" min="0" step="1">
 
             <button type="submit">Save Entry</button>
         </form>
@@ -139,9 +139,9 @@
     </div>
     {% endif %}
 
-    <a href="/pastwinners" class="nav-button">🏆 Past Winners</a>
+    <a href="/pastwinners?athlete={{ selected_athlete }}" class="nav-button">🏆 Past Winners</a>
     <a href="/download" class="nav-button">⬇️ Download Data</a>
-    <a href="/matrix" class="nav-button">👾 Bingo Challenge</a>
+    <a href="/matrix?athlete={{ selected_athlete }}" class="nav-button">👾 Bingo Challenge</a>
     <a href="/" class="nav-button">🔄 Change Athlete</a>
 
 </body>

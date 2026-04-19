@@ -48,8 +48,8 @@ def home():
         athlete = request.form["athlete"]
         month = request.form["month"]
         week = request.form["week"]
-        active_days = request.form["active_days"]
-        active_minutes = request.form["active_minutes"]
+        active_days = request.form["active_days"] or None
+        active_minutes = request.form["active_minutes"] or None
 
         conn = get_conn()
         cursor = conn.cursor()
@@ -117,7 +117,8 @@ def home():
 
 @app.route("/matrix")
 def matrix():
-    return render_template("matrix.html")
+    athlete = request.args.get("athlete", "")
+    return render_template("matrix.html", athlete=athlete)
 
 @app.route("/download")
 def download():
@@ -141,7 +142,8 @@ def download():
 
 @app.route("/pastwinners")
 def pastwinners():
-    return render_template("pastwinners.html")
+    athlete = request.args.get("athlete", "")
+    return render_template("pastwinners.html", athlete=athlete)
 
 if __name__ == "__main__":
     app.run(debug=True)
