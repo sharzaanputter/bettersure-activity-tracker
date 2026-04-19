@@ -9,16 +9,8 @@ app = Flask(__name__)
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
-athletes = ["Sharzaan", "Aneldi", "Josh", "Tshepo", "Jordaan", "Louise", "Rachel", "Hanli", "Jabu", "Lindile", "Julie", "Seu", "Jeanette", "Gavin", "Gina", "Monique", "Regard", "Marene", "Jeandre", "George", "Maxine", "Tammy", "Alex"]
-months = ["January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"]
-weeks = ["Week 1", "Week 2", "Week 3", "Week 4"]
-
-def get_conn():
-    return psycopg2.connect(DATABASE_URL)
-
-def init_db():
-    conn = get_conn()
+try:
+    conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS entries (
@@ -33,6 +25,16 @@ def init_db():
     """)
     conn.commit()
     conn.close()
+except Exception as e:
+    print(f"DB init error: {e}")
+
+athletes = ["Sharzaan", "Aneldi", "Josh", "Tshepo", "Jordaan", "Louise", "Rachel", "Hanli", "Jabu", "Lindile", "Julie", "Seu", "Jeanette", "Gavin", "Gina", "Monique", "Regard", "Marene", "Jeandre", "George", "Maxine", "Tammy", "Alex"]
+months = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"]
+weeks = ["Week 1", "Week 2", "Week 3", "Week 4"]
+
+def get_conn():
+    return psycopg2.connect(DATABASE_URL)
 
 @app.route("/", methods=["GET"])
 def select_athlete():
@@ -142,5 +144,4 @@ def pastwinners():
     return render_template("pastwinners.html")
 
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
