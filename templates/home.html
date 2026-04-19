@@ -54,10 +54,10 @@
             margin-top: 20px;
             margin-right: 10px;
         }
-        .nav-button:hover { 
+        .nav-button:hover {
             background-color: #e0e0e0;
             color: #333;
-             border: 2px solid #e0e0e0;
+            border: 2px solid #e0e0e0;
         }
     </style>
 </head>
@@ -66,14 +66,10 @@
 
     <div class="card">
         <h3>Log Your Activities</h3>
-        <form method="POST">
+        <form method="POST" action="/home">
             <label>👤 Athlete</label>
-            <select name="athlete">
-                {% for athlete in athletes %}
-                <option value="{{ athlete }}">{{ athlete }}</option>
-                {% endfor %}
-            </select>
-
+            <input type = "hidden" name="athlete" vlaue = "{{ selected_athlete }}">
+            <input type="text" value="{{ selected_athlete }}" disabled style="background-color: #f0f0f0; color: #888; cursor: not-allowed;">
             <label>🗓️ Month</label>
             <select name="month">
                 {% for month in months %}
@@ -144,7 +140,8 @@
 
     <a href="/pastwinners" class="nav-button">🏆 Past Winners</a>
     <a href="/download" class="nav-button">⬇️ Download Data</a>
-    <a href="/matrix" class="nav-button">👾Bingo Challenge</a>
+    <a href="/matrix" class="nav-button">👾 Bingo Challenge</a>
+    <a href="/" class="nav-button">🔄 Change Athlete</a>
 
 </body>
 </html>

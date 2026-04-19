@@ -1,22 +1,28 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
-import sqlite3
+import psycopg2
+import os
 from datetime import datetime
 import csv
 import io
 
 app = Flask(__name__)
 
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
 athletes = ["Sharzaan", "Aneldi", "Josh", "Tshepo", "Jordaan", "Louise", "Rachel", "Hanli", "Jabu", "Lindile", "Julie", "Seu", "Jeanette", "Gavin", "Gina", "Monique", "Regard", "Marene", "Jeandre", "George", "Maxine", "Tammy", "Alex"]
 months = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"]
 weeks = ["Week 1", "Week 2", "Week 3", "Week 4"]
 
+def get_conn():
+    return psycopg2.connect(DATABASE_URL)
+
 def init_db():
-    conn = sqlite3.connect("activity.db")
+    conn = get_conn()
     cursor = conn.cursor()
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS entries (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             athlete TEXT,
             month TEXT,
             week TEXT,
@@ -28,7 +34,11 @@ def init_db():
     conn.commit()
     conn.close()
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
+def select_athlete():
+    return render_template("select.html", athletes=athletes)
+
+@app.route("/home", methods=["GET", "POST"])
 def home():
     current_month = datetime.now().strftime("%B")
 
@@ -39,21 +49,26 @@ def home():
         active_days = request.form["active_days"]
         active_minutes = request.form["active_minutes"]
 
-        conn = sqlite3.connect("activity.db")
+        conn = get_conn()
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO entries (athlete, month, week, active_days, active_minutes)
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT(athlete, month, week) DO UPDATE SET
-                active_days = excluded.active_days,
-                active_minutes = excluded.active_minutes
+                active_days = EXCLUDED.active_days,
+                active_minutes = EXCLUDED.active_minutes
         """, (athlete, month, week, active_days, active_minutes))
         conn.commit()
         conn.close()
 
-        return redirect(url_for("home"))
+        return redirect(url_for("home", athlete=athlete))
 
-    conn = sqlite3.connect("activity.db")
+    selected_athlete = request.args.get("athlete", "")
+
+    if not selected_athlete or selected_athlete not in athletes:
+        return redirect(url_for("select_athlete"))
+
+    conn = get_conn()
     cursor = conn.cursor()
     cursor.execute("SELECT athlete, month, week, active_days, active_minutes FROM entries")
     rows = cursor.fetchall()
@@ -95,7 +110,8 @@ def home():
 
     return render_template("home.html", athletes=athletes, months=months, weeks=weeks,
                            days_table=days_table, minutes_table=minutes_table,
-                           current_month=current_month)
+                           current_month=current_month,
+                           selected_athlete=selected_athlete)
 
 @app.route("/matrix")
 def matrix():
@@ -103,7 +119,7 @@ def matrix():
 
 @app.route("/download")
 def download():
-    conn = sqlite3.connect("activity.db")
+    conn = get_conn()
     cursor = conn.cursor()
     cursor.execute("SELECT athlete, month, week, active_days, active_minutes FROM entries")
     rows = cursor.fetchall()

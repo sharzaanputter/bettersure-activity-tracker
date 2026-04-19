@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BetterSure Activity Tracker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', Arial, sans-serif;
+            min-height: 100vh;
+            background-color: rgb(24, 94, 115);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .logo-area {
+            margin-bottom: 36px;
+            text-align: center;
+        }
+
+        .logo-area h1 {
+            font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+            font-size: 3.2em;
+            color: rgb(245, 132, 31);
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+
+        .logo-area p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95em;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 44px 40px 36px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .card h2 {
+            color: rgb(24, 94, 115);
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card p.subtitle {
+            color: #888;
+            font-size: 0.88em;
+            margin-bottom: 28px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'DM Sans', Arial, sans-serif;
+            color: #333;
+            background: #fafafa;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: rgb(245, 132, 31);
+            background-color: white;
+        }
+
+        select.error-state {
+            border-color: #e53935;
+            background-color: #fff8f8;
+        }
+
+        .error-msg {
+            display: none;
+            color: #e53935;
+            font-size: 0.82em;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .error-msg.visible {
+            display: block;
+        }
+
+        .btn {
+            margin-top: 28px;
+            width: 100%;
+            padding: 14px;
+            background-color: rgb(245, 132, 31);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            font-family: 'DM Sans', Arial, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn:hover { background-color: rgb(220, 115, 20); }
+        .btn:active { transform: scale(0.99); }
+    </style>
+</head>
+<body>
+
+    <div class="logo-area">
+        <h1>BetterSure</h1>
+        <p>ACTIVITY TRACKER</p>
+    </div>
+
+    <div class="card">
+        <h2>Who are you? 👤</h2>
+        <p class="subtitle">Select your name to log your activity for the week.</p>
+
+        <label for="athlete-select">Select Athlete</label>
+        <select id="athlete-select">
+            <option value="" disabled selected>— Choose your name —</option>
+            {% for athlete in athletes %}
+            <option value="{{ athlete }}">{{ athlete }}</option>
+            {% endfor %}
+        </select>
+        <p class="error-msg" id="error-msg">⚠ Please select your name before continuing.</p>
+
+        <button class="btn" onclick="proceed()">Continue →</button>
+    </div>
+
+    <script>
+        function proceed() {
+            const select = document.getElementById('athlete-select');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (!select.value) {
+                select.classList.add('error-state');
+                errorMsg.classList.add('visible');
+                select.focus();
+                return;
+            }
+
+            select.classList.remove('error-state');
+            errorMsg.classList.remove('visible');
+            window.location.href = '/home?athlete=' + encodeURIComponent(select.value);
+        }
+
+        document.getElementById('athlete-select').addEventListener('change', function() {
+            this.classList.remove('error-state');
+            document.getElementById('error-msg').classList.remove('visible');
+        });
+    </script>
+
+</body>
+</html>
