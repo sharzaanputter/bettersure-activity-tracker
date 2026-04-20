@@ -109,6 +109,9 @@ def home():
             "Total": sum(week_data.get(f"Week {i}", {}).get("minutes", 0) or 0 for i in range(1, 5))
         }
         minutes_table.append(minutes_row)
+        
+    days_table.sort(key=lambda x: x["Total"], reverse=True)
+    minutes_table.sort(key=lambda x: x["Total"], reverse=True)
 
     return render_template("home.html", athletes=athletes, months=months, weeks=weeks,
                            days_table=days_table, minutes_table=minutes_table,
