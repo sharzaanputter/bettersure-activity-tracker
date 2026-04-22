@@ -28,7 +28,7 @@ try:
 except Exception as e:
     print(f"DB init error: {e}")
 
-athletes = ["Sharzaan", "Aneldi", "Josh", "Tshepo", "Jordaan", "Louise", "Rachel", "Hanli", "Jabu", "Lindile", "Julie", "Seu", "Jeanette", "Gavin", "Gina", "Monique", "Regard", "Marene", "Jeandre", "George", "Maxine", "Tammy", "Alex", "Christo T"]
+athletes = ["Sharzaan", "Aneldi", "Josh", "Tshepo", "Jordaan", "Louise", "Rachel", "Hanli", "Jabu", "Lindile", "Julie", "Seu", "Jeanette", "Gavin", "Gina", "Monique", "Regard", "Marene", "Jeandre", "George", "Maxine", "Tammy", "Alex", "Christo T", "Berget"]
 months = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"]
 weeks = ["Week 1", "Week 2", "Week 3", "Week 4"]
@@ -109,7 +109,7 @@ def home():
             "Total": sum(week_data.get(f"Week {i}", {}).get("minutes", 0) or 0 for i in range(1, 5))
         }
         minutes_table.append(minutes_row)
-        
+
     days_table.sort(key=lambda x: x["Total"], reverse=True)
     minutes_table.sort(key=lambda x: x["Total"], reverse=True)
 
