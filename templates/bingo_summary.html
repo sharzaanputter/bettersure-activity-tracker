@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BetterSure Bingo Challenge</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: rgb(24, 94, 115);
+            color: white;
+            padding: 20px;
+        }
+        h1 { color: rgb(245, 132, 31); font-size: 2em; margin-bottom: 5px; }
+        h2 { color: white; font-size: 1.2em; font-weight: normal; margin-bottom: 25px; }
+
+        .card {
+            background-color: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        h3 { color: rgb(24, 94, 115); margin-top: 0; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 12px; text-align: center; border-bottom: 1px solid #ddd; }
+        th { background-color: rgb(24, 94, 115); color: white; }
+        td:first-child { text-align: left; font-weight: bold; }
+        tr:hover { background-color: #f9f9f9; }
+
+        .cell-link {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.85em;
+            background-color: #f0f0f0;
+            color: #333;
+            transition: background 0.2s;
+        }
+        .cell-link:hover { background-color: rgb(245, 132, 31); color: white; }
+
+        .bingo-badge {
+            display: inline-block;
+            background-color: rgb(245, 132, 31);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 10px;
+            font-size: 0.85em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .bingo-badge:hover { background-color: rgb(24, 94, 115); color: white; }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .form-group label { font-weight: bold; color: rgb(24, 94, 115); display: block; margin-bottom: 4px; }
+        .athlete-display {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f0f0f0;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        .nav-button {
+            background-color: rgb(245, 132, 31);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 15px;
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-button:hover { background-color: white; color: rgb(24, 94, 115); }
+        .nav-button.secondary { background-color: white; color: rgb(24, 94, 115); }
+        .nav-button.secondary:hover { background-color: rgb(245, 132, 31); color: white; }
+    </style>
+</head>
+<body>
+    <h1>🎯 May Move! Bingo</h1>
+    <h2>Complete a full row — across, down or diagonal — to win</h2>
+
+    <div class="card">
+        <h3>📊 Team Progress</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Athlete</th>
+                    {% for week in weeks %}
+                    <th>{{ week }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for athlete in athletes%}
+                <tr>
+                    <td>{{ athlete }}</td>
+                    {% for week in weeks %}
+                    <td>
+                        {% if summary[athlete][week]["bingo"] %}
+                            <a href="/matrix?athlete={{ athlete }}&week={{ week }}" class="bingo-badge">BINGO ✅</a>
+                        {% elif summary[athlete][week]["count"] > 0 %}
+                            <a href="/matrix?athlete={{ athlete }}&week={{ week }}" class="cell-link">{{ summary[athlete][week]["count"] }}</a>
+                        {% else %}
+                            <a href="/matrix?athlete={{ athlete }}&week={{ week }}" class="cell-link">—</a>
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+       <div style="display: flex; gap: 40px; align-items: flex-end;">
+            <div style="flex: 1;">
+            <label style="font-weight: bold; color: rgb(24, 94, 115); display: block; margin-bottom: 4px;">👤 Athlete</label>
+            <div class="athlete-display">{{ selected_athlete }}</div>
+        </div>
+        <div style="flex: 1;">
+            <label style="font-weight: bold; color: rgb(24, 94, 115); display: block; margin-bottom: 4px;">📅 Week</label>
+            <select id="week-select">
+                {% for week in weeks %}
+                <option value="{{ week }}">{{ week }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+        <button class="nav-button" onclick="goToCard()">Open Bingo Card →</button>
+    </div>
+
+    <a href="/home?athlete={{ selected_athlete }}" class="nav-button secondary">← Back to Tracker</a>
+    <a href="/bingo-rules" class="nav-button secondary">📋 Bingo Rules</a>
+
+    <script>
+        function goToCard() {
+            const athlete = "{{ selected_athlete }}";
+            const week = document.getElementById("week-select").value;
+            if (!athlete) {
+                alert("No athlete selected. Please go back and select your name.");
+                return;
+            }
+            window.location.href = "/matrix?athlete=" + encodeURIComponent(athlete) + "&week=" + encodeURIComponent(week);
+        }
+    </script>
+</body>
+</html>

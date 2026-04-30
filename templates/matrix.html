@@ -1,61 +1,292 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Activity Bingo Challenge</title>
+    <title>BetterSure Bingo Challenge</title>
     <style>
         body {
-            font-family: 'Courier New', monospace;
-            max-width: 1000px;
-            margin: 50px auto;
-            background-color: black;
-            color: #00FF00;
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: white;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 { color: rgb(24, 94, 115); font-size: 2.5em; margin-bottom: 5px; }
+        .subtitle { color: #666; font-size: 0.9em; margin-bottom: 10px; }
+        .athlete-name { color: rgb(245, 132, 31); font-size: 1.2em; margin-bottom: 15px; }
+
+        .bingo-header {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-width: 750px;
+            margin: 0 auto 8px;
+        }
+        .bingo-letter {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: rgb(24, 94, 115);
+        }
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            max-width: 750px;
+            margin: 0 auto 20px;
+        }
+        .cell {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
             text-align: center;
         }
-        h1 {
-            color: #00FF00;
-            font-size: 3em;
-            text-shadow: 0 0 10px #00FF00;
+        .cell.type-bg-LIGHT      { background-color: #d4ede8; }
+        .cell.type-bg-MODERATE   { background-color: #fdebd0; }
+        .cell.type-bg-CHALLENGE  { background-color: #fad5c8; }
+        .cell.type-bg-WILDCARD   { background-color: #e8d5f5; }
+        .cell.type-bg-FREE       { background-color: #d5eaf5; }
+        .cell.type-bg-ELITE      { background-color: #2c3e50; }
+        .cell.type-bg-RECOVERY   { background-color: #f5e6d3; }
+
+        .cell:hover:not(.completed):not(.free) {
+            filter: brightness(0.92);
+            transform: scale(1.02);
         }
-        h2 {
-            color: #00FF00;
-            text-shadow: 0 0 5px #00FF00;
+        .cell.completed {
+            background-color: rgb(245, 132, 31) !important;
+            cursor: pointer;
         }
-        p { color: #00FF00; }
-        .card {
-            background-color: black;
-            border: 2px solid #00FF00;
-            box-shadow: 0 0 20px #00FF00;
-            padding: 50px;
-            border-radius: 10px;
-            margin-top: 50px;
+        .cell.free { cursor: default; }
+
+        .cell-type {
+            font-size: 0.6em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
         }
+        .type-LIGHT    { color: #4CAF9A; }
+        .type-MODERATE { color: #E8A838; }
+        .type-CHALLENGE{ color: #E8724A; }
+        .type-WILDCARD { color: #9B59B6; }
+        .type-FREE     { color: #3498DB; }
+        .type-ELITE    { color: #a0b4c8; }
+        .type-RECOVERY { color: #c0845a; }
+
+        /* ELITE dark cells need light text by default */
+        .cell.type-bg-ELITE .cell-type  { color: #a0b4c8; }
+        .cell.type-bg-ELITE .cell-text  { color: #ecf0f1; }
+        .cell.type-bg-ELITE .checkmark  { color: white; }
+
+        .cell.completed .cell-type,
+        .cell.completed .cell-text,
+        .cell.completed .checkmark { color: white; }
+
+        .cell-text {
+            font-size: 0.68em;
+            line-height: 1.3;
+            color: #333;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        .checkmark { font-size: 1em; margin-top: 4px; min-height: 1.2em; }
+
+        .bingo-announcement {
+            display: none;
+            background: linear-gradient(135deg, rgb(245, 132, 31), rgb(200, 90, 10));
+            border: 3px solid rgb(24, 94, 115);
+            border-radius: 15px;
+            padding: 20px 40px;
+            margin: 15px auto;
+            max-width: 500px;
+            animation: pulse 1.5s infinite;
+        }
+        .bingo-announcement h2 { font-size: 3em; color: white; margin: 0; }
+        .bingo-announcement p  { color: white; margin: 5px 0 0; }
+
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 20px rgb(245, 132, 31); }
+            50%  { box-shadow: 0 0 50px rgb(245, 132, 31); }
+            100% { box-shadow: 0 0 20px rgb(245, 132, 31); }
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+        .legend-item { font-size: 0.78em; display: flex; align-items: center; gap: 5px; color: #333; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .progress { color: #666; font-size: 0.9em; margin-bottom: 10px; }
+
         .back-button {
-            background-color: black;
-            color: #00FF00;
+            background-color: rgb(245, 132, 31);
+            color: white;
             padding: 10px 20px;
-            border: 2px solid #00FF00;
+            border: none;
             border-radius: 5px;
             font-size: 16px;
-            font-family: 'Courier New', monospace;
             cursor: pointer;
-            margin-top: 30px;
+            margin-top: 20px;
             display: inline-block;
             text-decoration: none;
-            box-shadow: 0 0 10px #00FF00;
         }
-        .back-button:hover {
-            background-color: #00FF00;
-            color: black;
-        }
+        .back-button:hover { background-color: rgb(24, 94, 115); }
     </style>
 </head>
 <body>
-    <h1>WELCOME TO ACTIVITY BINGO👾</h1>
-    <div class="card">
-        <h2>>>> UNDER CONSTRUCTION <<<</h2>
-        <p>This page is coming soon...March 2026</p>
+    <h1>🎯 MAY MOVE BINGO!</h1>
+    <p class="subtitle">Complete a full row — across, down or diagonal — to win</p>
+    <p class="athlete-name">👤 {{ athlete }} &nbsp;|&nbsp; 📅 {{ week }}</p>
+
+    <div class="bingo-announcement" id="bingo-announcement">
+        <h2>🎉 BINGO! 🎉</h2>
+        <p>You completed a line! Amazing work!</p>
     </div>
+
+    <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#4CAF9A"></div> Light (20–30 min)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#E8A838"></div> Moderate (30–60 min)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#E8724A"></div> Challenge (60+ min)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#2c3e50"></div> Elite</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#c0845a"></div> Recovery</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#9B59B6"></div> Wildcard</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3498DB"></div> Free</div>
+    </div>
+
+    <div class="bingo-header">
+        <div class="bingo-letter">B</div>
+        <div class="bingo-letter">I</div>
+        <div class="bingo-letter">N</div>
+        <div class="bingo-letter">G</div>
+        <div class="bingo-letter">O</div>
+    </div>
+
+    <div class="bingo-grid" id="bingo-grid"></div>
+
+    <p class="progress" id="progress"></p>
     <br>
-    <a href="/home?athlete={{ athlete }}" class="back-button">[ RETURN TO TRACKER ]</a>
+    <a href="/bingo?athlete={{ athlete }}" class="back-button">Return to Bingo Summary</a>
+
+    <script>
+        const athlete = "{{ athlete }}";
+        const completed = new Set({{ completed | tojson }});
+
+        const cells = [
+            // Row 1
+            {type:"LIGHT",    text:"20–30 min brisk walk or light jog (1–5km)"},
+            {type:"LIGHT",    text:"20–30 min bodyweight circuit — squats, lunges & push-ups"},
+            {type:"LIGHT",    text:"20–30 min beginner yoga or full body stretch"},
+            {type:"MODERATE", text:"30–60 min run or walk/run combo (5–10km)"},
+            {type:"MODERATE", text:"30–60 min cycle (10–20km)"},
+            // Row 2
+            {type:"LIGHT",    text:"20–30 min swim (500m–1km)"},
+            {type:"MODERATE", text:"30–60 min HIIT or circuit class"},
+            {type:"WILDCARD", text:"Wildcard — nominate your own recorded activity on WhatsApp before you do it"},
+            {type:"CHALLENGE",text:"60+ min run or trail run (10km+)"},
+            {type:"LIGHT",    text:"20–30 min dance, aerobics or group fitness class"},
+            // Row 3 (middle)
+            {type:"MODERATE", text:"30–60 min hike or trail walk"},
+            {type:"CHALLENGE",text:"60+ min cycle (20km+)"},
+            {type:"FREE",     text:"Team photo doing something active — post to WhatsApp"},
+            {type:"CHALLENGE",text:"60+ min full body gym session"},
+            {type:"MODERATE", text:"30–60 min team sport or group activity"},
+            // Row 4
+            {type:"LIGHT",    text:"Upper body gym session (20–30 min)"},
+            {type:"MODERATE", text:"Core + strength session (30–60 min)"},
+            {type:"CHALLENGE",text:"60+ min high intensity class or sport (football, squash, crossfit)"},
+            {type:"MODERATE", text:"Full body gym session (30–60 min)"},
+            {type:"LIGHT",    text:"Lower body gym session (20–30 min)"},
+            // Row 5
+            {type:"MODERATE", text:"30–60 min swim (1–2km)"},
+            {type:"CHALLENGE",text:"60+ min swim (2km+)"},
+            {type:"CHALLENGE",text:"60+ min run or cycle combination in one day"},
+            {type:"ELITE",    text:"Elite — 21km+ run / 50km+ cycle / 3km+ swim / 5 gym sessions in a week"},
+            {type:"RECOVERY", text:"Active recovery — foam rolling, mobility or gentle yoga (any duration)"},
+        ];
+
+        const grid = document.getElementById("bingo-grid");
+
+        const keepFull = ["FREE", "WILDCARD", "ELITE", "RECOVERY"];
+        const durations = { "LIGHT": "20–30 min", "MODERATE": "30–60 min", "CHALLENGE": "60+ min" };
+
+        cells.forEach((cell, index) => {
+            const div = document.createElement("div");
+            const isCompleted = completed.has(index);
+            const isFree = cell.type === "FREE";
+            div.className = "cell type-bg-" + cell.type + (isCompleted ? " completed" : "") + (isFree ? " free" : "");
+            div.dataset.index = index;
+
+            if (keepFull.includes(cell.type)) {
+                div.innerHTML = `
+                    <div class="cell-type type-${cell.type}">${cell.type}</div>
+                    <div class="cell-text">${cell.text}</div>
+                    <div class="checkmark">${isCompleted ? "✅" : ""}</div>
+                `;
+            } else {
+                div.style.justifyContent = "center";
+                div.innerHTML = `
+                    <div class="cell-type type-${cell.type}" style="font-size:1em; margin:0;">${cell.type}</div>
+                    <div style="font-size:0.75em; color:#000; margin-top:5px;">${durations[cell.type] || ""}</div>
+                    <div class="checkmark" style="margin-top:8px;">${isCompleted ? "✅" : ""}</div>
+                `;
+            }
+
+            if (!isFree) div.addEventListener("click", () => toggleCell(index, div));
+            grid.appendChild(div);
+        });
+
+        function toggleCell(index, div) {
+            fetch("/matrix/toggle", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({athlete: athlete, week: "{{ week }}", cell_index: index})
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.completed) {
+                    div.classList.add("completed");
+                    div.querySelector(".checkmark").textContent = "✅";
+                    completed.add(index);
+                } else {
+                    div.classList.remove("completed");
+                    div.querySelector(".checkmark").textContent = "";
+                    completed.delete(index);
+                }
+                updateProgress();
+                checkBingo();
+            });
+        }
+
+        function updateProgress() {
+            const count = [...completed].filter(i => i !== 12).length;
+            document.getElementById("progress").textContent = count + " cells completed";
+        }
+
+        function checkBingo() {
+            const lines = [
+                [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24],
+                [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],
+                [0,6,12,18,24],[4,8,12,16,20]
+            ];
+            const hasBingo = lines.some(line => line.every(i => completed.has(i)));
+            document.getElementById("bingo-announcement").style.display = hasBingo ? "block" : "none";
+        }
+
+        updateProgress();
+        checkBingo();
+    </script>
 </body>
 </html>

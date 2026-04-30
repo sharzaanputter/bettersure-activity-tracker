@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>May Move! Bingo — Rules</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: rgb(24, 94, 115);
+            color: white;
+            padding: 20px;
+        }
+        h1 { color: rgb(245, 132, 31); font-size: 2em; margin-bottom: 5px; }
+        .tagline { color: rgba(255,255,255,0.75); font-size: 0.95em; margin-bottom: 25px; font-style: italic; }
+
+        .card {
+            background-color: white;
+            color: #333;
+            padding: 25px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: rgb(24, 94, 115);
+            font-size: 1.15em;
+            margin-top: 0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid rgb(245, 132, 31);
+            padding-bottom: 6px;
+        }
+        p { line-height: 1.6; margin: 0 0 10px; }
+        ul { margin: 8px 0 10px 0; padding-left: 20px; }
+        li { line-height: 1.6; margin-bottom: 5px; }
+
+        /* Difficulty badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 4px;
+        }
+        .badge-LIGHT      { background-color: #d4ede8; color: #2e7d6b; }
+        .badge-MODERATE   { background-color: #fdebd0; color: #b7770d; }
+        .badge-CHALLENGE  { background-color: #fad5c8; color: #c0392b; }
+        .badge-ELITE      { background-color: #2c3e50; color: #ecf0f1; }
+        .badge-RECOVERY   { background-color: #f5e6d3; color: #9b5e2e; }
+        .badge-WILDCARD   { background-color: #e8d5f5; color: #7d3c98; }
+        .badge-FREE       { background-color: #d5eaf5; color: #1a6fa0; }
+
+        /* Activity levels table */
+        .level-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0 16px;
+            font-size: 0.88em;
+        }
+        .level-table th {
+            background-color: rgb(24, 94, 115);
+            color: white;
+            padding: 8px 10px;
+            text-align: left;
+        }
+        .level-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .level-table tr:last-child td { border-bottom: none; }
+        .level-table tr:nth-child(even) td { background-color: #f9f9f9; }
+
+        /* Combining rule callout */
+        .combine-box {
+            background-color: #fff8f0;
+            border-left: 4px solid rgb(245, 132, 31);
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 0;
+            margin: 10px 0;
+        }
+        .combine-box p { margin: 0 0 6px; }
+        .combine-box p:last-child { margin-bottom: 0; }
+
+        /* Weekly dates */
+        .week-row {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .week-row:last-child { border-bottom: none; }
+        .week-label {
+            font-weight: bold;
+            color: rgb(24, 94, 115);
+            width: 80px;
+            flex-shrink: 0;
+        }
+
+        /* Spirit quote */
+        .spirit-quote {
+            background-color: rgb(24, 94, 115);
+            color: white;
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            font-style: italic;
+            line-height: 1.7;
+            font-size: 0.95em;
+            text-align: center;
+        }
+
+        .back-button {
+            background-color: rgb(245, 132, 31);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+        .back-button:hover { background-color: white; color: rgb(24, 94, 115); }
+        .footer-note {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.82em;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎯 May Move! Bingo — Full Rules</h1>
+    <p class="tagline">Complete a full row every week. Complete all 4 weeks to enter the smoothie draw.</p>
+
+    <!-- How It Works -->
+    <div class="card">
+        <h2>How It Works</h2>
+        <p>May is a 4 week challenge. The same Bingo card runs every week. Complete a full row — across, down or diagonal — each week. Collect all 4 weekly completions and you will be entered into the lucky draw for a smoothie at the end of the month.</p>
+        <ul>
+            <li>The card resets every Monday. A new week = a fresh card.</li>
+            <li>Each completed bingo card will earn you a lucky draw entry.</li>
+            <li>You do not carry squares over from one week to the next.</li>
+            <li>You can play as an individual or as a team of up to 3 people. A team shares one card.</li>
+            <li>A team needs to select a captain to record their results.</li>
+            <li>If you play as a team, each square only needs to be completed by one team member. Your choice how you split it — that's between you and your conscience.</li>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Activity Levels -->
+    <div class="card">
+        <h2>Activity Levels</h2>
+        <p>Every square on the card is colour-coded to one of four levels. Use the table below to work out which level your activity qualifies for.</p>
+
+        <table class="level-table">
+            <thead>
+                <tr>
+                    <th>Level</th>
+                    <th>Duration</th>
+                    <th>Walk / Run</th>
+                    <th>Cycle</th>
+                    <th>Swim</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge badge-LIGHT">🟢 Light</span></td>
+                    <td>20–30 min</td><td>1–5 km</td><td>5–10 km</td><td>500m–1 km</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-MODERATE">🟡 Moderate</span></td>
+                    <td>30–60 min</td><td>5–10 km</td><td>10–20 km</td><td>1–2 km</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-CHALLENGE">🔴 Challenge</span></td>
+                    <td>60+ min</td><td>10–21 km</td><td>20–50 km</td><td>2–3 km</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-ELITE">💪 Elite</span></td>
+                    <td>90+ min</td><td>21 km+</td><td>50 km+</td><td>3 km+</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="level-table">
+            <thead>
+                <tr>
+                    <th>Level</th>
+                    <th>Duration</th>
+                    <th>Gym Session</th>
+                    <th>Classes / Sport</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge badge-LIGHT">🟢 Light</span></td>
+                    <td>20–30 min</td>
+                    <td>1 session (upper or lower body)</td>
+                    <td>1 class or 20–30 min sport</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-MODERATE">🟡 Moderate</span></td>
+                    <td>30–60 min</td>
+                    <td>2 sessions (different muscle groups)</td>
+                    <td>1 class or 30–60 min sport</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-CHALLENGE">🔴 Challenge</span></td>
+                    <td>60+ min</td>
+                    <td>3 sessions in a week</td>
+                    <td>60+ min high intensity</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-ELITE">💪 Elite</span></td>
+                    <td>90+ min</td>
+                    <td>5 sessions in a week</td>
+                    <td>Competition or event</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Combining Activities -->
+    <div class="card">
+        <h2>Combining Activities</h2>
+        <p>You do not have to do one single activity to qualify for a Moderate or Challenge square. You can combine two activities in the same week to reach the next level.</p>
+        <div class="combine-box">
+            <p>✅ <strong>Two Light activities in a week = qualifies for one Moderate square.</strong></p>
+            <p>✅ <strong>Two Moderate activities in a week = qualifies for one Challenge square.</strong></p>
+        </div>
+        <p>Mix and match freely — a Light swim and a Light gym session counts as one Moderate square. A Moderate run and a Moderate cycle counts as one Challenge square. The combination must happen within the same weekly card period.</p>
+    </div>
+
+    <!-- Special Squares -->
+    <div class="card">
+        <h2>Special Squares</h2>
+
+        <p><span class="badge badge-WILDCARD">WILDCARD</span></p>
+        <ul>
+            <li>Nominate your own intentional, recorded activity on WhatsApp <strong>before you do it</strong>.</li>
+            <li>It must be something you will actively track — Strava, fitness watch, or equivalent.</li>
+            <li>It cannot duplicate a square already on the card.</li>
+            <li>Once completed, post your record to the group to confirm.</li>
+            <li>Incidental movement does not count — the activity must be deliberate and logged.</li>
+        </ul>
+
+        <p style="margin-top:16px"><span class="badge badge-FREE">FREE</span></p>
+        <ul>
+            <li>Post a team photo of your group doing something active in the WhatsApp group.</li>
+            <li>The Free square resets every week — you need a new photo each week to claim it.</li>
+            <li>One photo counts for the whole team.</li>
+            <li>The activity must be real and intentional — not a staged photo of people standing still.</li>
+        </ul>
+
+        <p style="margin-top:16px"><span class="badge badge-ELITE">ELITE</span></p>
+        <ul>
+            <li>The Elite square counts as one tick — one activity, one square, regardless of how far above the threshold you go.</li>
+            <li>It does not auto-claim any other square.</li>
+            <li>Examples: a half marathon (21km+), a 50km+ cycle, a 3km+ swim, or 5 gym sessions in one week.</li>
+        </ul>
+
+        <p style="margin-top:16px"><span class="badge badge-RECOVERY">RECOVERY</span></p>
+        <ul>
+            <li>Specifically included for Comrades Marathon runners tapering in May, and for anyone who needs a lighter week.</li>
+            <li>Foam rolling, mobility work, gentle yoga, or a rest-day stretch all qualify.</li>
+            <li>No minimum duration — do what your body needs.</li>
+            <li>Must still be intentional and logged.</li>
+        </ul>
+    </div>
+
+    <!-- Weekly Structure -->
+    <div class="card">
+        <h2>Weekly Structure</h2>
+        <p>May has four weekly card periods. The first and last weeks include a few extra days to cover the full month.</p>
+        <div class="week-row"><span class="week-label">Week 1</span><span>1–7 May</span></div>
+        <div class="week-row"><span class="week-label">Week 2</span><span>8–14 May</span></div>
+        <div class="week-row"><span class="week-label">Week 3</span><span>15–21 May</span></div>
+        <div class="week-row"><span class="week-label">Week 4</span><span>22–31 May (extended)</span></div>
+        <p style="margin-top:14px">Complete a full row in each weekly period. All 4 completions enter you into the monthly draw. Partial completions do not count toward the draw but are still celebrated on the WhatsApp group.</p>
+    </div>
+
+    <!-- The Smoothie Draw -->
+    <div class="card">
+        <h2>🥤 The Smoothie Draw</h2>
+        <ul>
+            <li>Everyone who completes all 4 weekly cards goes into the draw.</li>
+            <li>The draw takes place at the start of June.</li>
+            <li>Winners receive a smoothie — because you earned it.</li>
+            <li>Teams enter the draw as one entry — winning the draw wins the smoothie for the whole team.</li>
+        </ul>
+    </div>
+
+    <!-- Tracking -->
+    <div class="card">
+        <h2>Tracking & Recording</h2>
+        <ul>
+            <li>Log your activities on Strava or post to the WhatsApp group as your record.</li>
+            <li>Each square must be claimed with evidence — a Strava activity, a screenshot, or a WhatsApp post.</li>
+            <li>No evidence, no tick.</li>
+            <li>Wildcard squares must be nominated before the activity — post your intention first, then your completion.</li>
+            <li>When you complete a row, post your completed card to the WhatsApp group to claim your weekly completion.</li>
+        </ul>
+    </div>
+
+    <!-- Spirit -->
+    <div class="spirit-quote">
+        "This is not about being the fittest person here. It is about showing up every week, moving your body, and building a habit that lasts beyond May. Whether you run a half marathon or take your first 20-minute walk, every square you tick is a genuine win. Train smart. Rest when you need to. Move together."
+    </div>
+
+    <a href="/bingo" class="back-button">← Back to Bingo</a>
+
+    <p class="footer-note">BetterSure Health Club — Feel better. Live better. Work better.</p>
+
+</body>
+</html>
