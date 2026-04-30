@@ -229,6 +229,6 @@ def pastwinners():
     athlete = request.args.get("athlete", "")
     return render_template("pastwinners.html", athlete=athlete)
 
+init_db()
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
