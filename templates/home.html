@@ -59,6 +59,25 @@
             color: #333;
             border: 2px solid #e0e0e0;
         }
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .filter-bar label {
+            font-weight: bold;
+            color: rgb(24, 94, 115);
+            white-space: nowrap;
+            margin: 0;
+        }
+        .filter-bar select {
+            width: auto;
+            margin: 0;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        .hidden-row { display: none; }
     </style>
 </head>
 <body>
@@ -96,6 +115,19 @@
     </div>
 
     {% if days_table %}
+
+    <div class="card">
+        <div class="filter-bar">
+            <label>🗓️ Filter by month:</label>
+            <select id="month-filter" onchange="filterTables()">
+                <option value="all">All Months</option>
+                {% for month in months %}
+                <option value="{{ month }}" {% if month == current_month %}selected{% endif %}>{{ month }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
     <div class="card">
         <h3>Active Days</h3>
         <table>
@@ -104,7 +136,7 @@
                 <th>Week 2</th><th>Week 3</th><th>Week 4</th><th>Total</th>
             </tr>
             {% for row in days_table %}
-            <tr>
+            <tr class="data-row" data-month="{{ row['Month'] }}">
                 <td>{{ row["Athlete"] }}</td>
                 <td>{{ row["Month"] }}</td>
                 <td>{{ row["Week 1"] }}</td>
@@ -125,7 +157,7 @@
                 <th>Week 2</th><th>Week 3</th><th>Week 4</th><th>Total</th>
             </tr>
             {% for row in minutes_table %}
-            <tr>
+            <tr class="data-row" data-month="{{ row['Month'] }}">
                 <td>{{ row["Athlete"] }}</td>
                 <td>{{ row["Month"] }}</td>
                 <td>{{ row["Week 1"] }}</td>
@@ -143,6 +175,22 @@
     <a href="/download" class="nav-button">⬇️ Download Data</a>
     <a href="/bingo?athlete={{ selected_athlete }}" class="nav-button">👾 Bingo Challenge</a>
     <a href="/" class="nav-button">🔄 Change Athlete</a>
+
+    <script>
+        function filterTables() {
+            const selected = document.getElementById("month-filter").value;
+            document.querySelectorAll(".data-row").forEach(row => {
+                if (selected === "all" || row.dataset.month === selected) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        // Apply current month filter on page load
+        filterTables();
+    </script>
 
 </body>
 </html>
