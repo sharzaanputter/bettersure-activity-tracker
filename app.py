@@ -205,9 +205,7 @@ def toggle_cell():
     conn.close()
     return jsonify({"status": "ok", "completed": completed})
 
-@app.route("/bingo-rules")
-def bingo_rules():
-    return render_template("bingo_rules.html")
+
 
 @app.route("/download")
 def download():
