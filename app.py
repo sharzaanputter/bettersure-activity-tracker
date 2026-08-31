@@ -227,6 +227,50 @@ def pastwinners():
     athlete = request.args.get("athlete", "")
     return render_template("pastwinners.html", athlete=athlete)
 
+@app.route("/mystats")
+def mystats():
+    athlete = request.args.get("athlete", "")
+    if not athlete or athlete not in athletes:
+        return redirect(url_for("select_athlete"))
+
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute("SELECT athlete, month, active_days, active_minutes FROM entries")
+    rows = cursor.fetchall()
+    conn.close()
+
+    athlete_monthly = {}
+    for a, month, days, mins in rows:
+        if a not in athlete_monthly:
+            athlete_monthly[a] = {}
+        if month not in athlete_monthly[a]:
+            athlete_monthly[a][month] = {"days": 0, "minutes": 0}
+        athlete_monthly[a][month]["days"] += days or 0
+        athlete_monthly[a][month]["minutes"] += mins or 0
+
+    all_months = set()
+    for a_data in athlete_monthly.values():
+        all_months.update(a_data.keys())
+
+    month_order = ["January","February","March","April","May","June",
+                   "July","August","September","October","November","December"]
+    sorted_months = [m for m in month_order if m in all_months]
+
+    my_data = athlete_monthly.get(athlete, {})
+    my_days    = [my_data.get(m, {}).get("days", 0) for m in sorted_months]
+    my_minutes = [my_data.get(m, {}).get("minutes", 0) for m in sorted_months]
+
+    avg_days, avg_minutes = [], []
+    for month in sorted_months:
+        d = [athlete_monthly[a][month]["days"] for a in athlete_monthly if month in athlete_monthly[a]]
+        m = [athlete_monthly[a][month]["minutes"] for a in athlete_monthly if month in athlete_monthly[a]]
+        avg_days.append(round(sum(d)/len(d), 1) if d else 0)
+        avg_minutes.append(round(sum(m)/len(m), 1) if m else 0)
+
+    return render_template("mystats.html", athlete=athlete, months=sorted_months,
+                           my_days=my_days, my_minutes=my_minutes,
+                           avg_days=avg_days, avg_minutes=avg_minutes)
+
 init_db()
 if __name__ == "__main__":
     app.run(debug=True)

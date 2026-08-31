@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Stats – {{ athlete }}</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: rgb(24, 94, 115);
+            color: white;
+            padding: 20px;
+        }
+        h1 { color: rgb(245, 132, 31); }
+        h2 { color: white; margin-top: 0; }
+        .card {
+            background-color: white;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+        .card h3 { color: rgb(24, 94, 115); margin-top: 0; }
+        .nav-button {
+            background-color: rgb(245, 132, 31);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            display: inline-block;
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+        .nav-button:hover { background-color: #e0e0e0; color: #333; }
+    </style>
+</head>
+<body>
+    <h1>📊 My Stats</h1>
+    <h2>{{ athlete }}</h2>
+
+    <div class="card">
+        <h3>Active Days per Month</h3>
+        <canvas id="daysChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Active Minutes per Month</h3>
+        <canvas id="minutesChart"></canvas>
+    </div>
+
+    <a href="/home?athlete={{ athlete }}" class="nav-button">⬅ Back to Tracker</a>
+
+    <script>
+        const months  = {{ months | tojson }};
+        const myDays  = {{ my_days | tojson }};
+        const myMins  = {{ my_minutes | tojson }};
+        const avgDays = {{ avg_days | tojson }};
+        const avgMins = {{ avg_minutes | tojson }};
+
+        const teal   = "rgb(24, 94, 115)";
+        const orange = "rgb(245, 132, 31)";
+        const tealA  = "rgba(24, 94, 115, 0.5)";
+        const orangeA= "rgba(245, 132, 31, 0.5)";
+
+        new Chart(document.getElementById("daysChart"), {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: "{{ athlete }}",
+                        data: myDays,
+                        backgroundColor: orangeA,
+                        borderColor: orange,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Group Average",
+                        data: avgDays,
+                        backgroundColor: tealA,
+                        borderColor: teal,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: "top" } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: "Days" } } }
+            }
+        });
+
+        new Chart(document.getElementById("minutesChart"), {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: "{{ athlete }}",
+                        data: myMins,
+                        backgroundColor: orangeA,
+                        borderColor: orange,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Group Average",
+                        data: avgMins,
+                        backgroundColor: tealA,
+                        borderColor: teal,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: "top" } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: "Minutes" } } }
+            }
+        });
+    </script>
+</body>
+</html>
